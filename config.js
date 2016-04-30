@@ -10,5 +10,8 @@ module.exports = {
   		dir: './views',
   		engine: 'jade'
   	}
+  },
+  site: {
+    scripts: ['chart','jquery.min']
   }
 }

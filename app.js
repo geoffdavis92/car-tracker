@@ -13,6 +13,10 @@ app
 	.use('/js',express.static(__dirname+'/js'))
 	.use('/css',express.static(__dirname+'/css'))
 
+app.locals = {
+	test: 'test'
+}
+
 app.listen(config.port)
 console.log(`App started at ${config.port}`);
 
