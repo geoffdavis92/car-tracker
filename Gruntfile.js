@@ -1,12 +1,24 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
+		/*copy: {
+			js: {
+				files: {
+					'js/lib/jquery.js':'node_modules/jquery/dist/jquery.js',
+					'js/lib/chart.js':'node_modules/chart.js/dist/chart.js'
+				}
+			}
+		},*/
 		watch: {
+			gfile: {
+				files: 'Gruntfile.js',
+				tasks: ['copy','babel','sass']
+			},
 			sass: {
 				files: ['src/sass/**/*.sass'],
 				tasks: ['sass']
 			},
 			js: {
-				files: ['src/js/es6/*.es6'],
+				files: ['src/es6/*.es6'],
 				tasks: ['babel']
 			}
 		},
@@ -15,7 +27,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					cwd: './src/sass/',
-					src: 'styles.sass',
+					src: 'main.sass',
 					dest: './css/',
 					ext: '.css'
 				}]
@@ -33,6 +45,7 @@ module.exports = function(grunt) {
 			}
 		}
 	})
+	//grunt.loadNpmTasks('grunt-contrib-copy')
 	grunt.loadNpmTasks('grunt-contrib-watch')
 	grunt.loadNpmTasks('grunt-contrib-sass')
 	grunt.loadNpmTasks('grunt-babel')
