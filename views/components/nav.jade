@@ -1,0 +1,8 @@
+//- nav
+
+mixin nav(id)
+	if id === 'site'
+		nav(id=id)
+			for page in pages
+				if !page.noindex
+					a(href="#{page.route}")= page.title
