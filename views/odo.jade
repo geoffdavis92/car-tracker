@@ -4,46 +4,37 @@ block frontmatter
 block content
 	+chart('odo',250)
 	script.
-		var ctx = $('#odo'),
+		const sets = [];
+			  setupData = function(d,a) {
+			  		var o = {}
+					o['label'] = "odometer reading"
+					o['data'] = d.odo
+					o['borderColor'] = 'rgba(250,125,0,1)'
+					o['backgroundColor'] = 'rgba(250,125,0,.3)'
+					a.push(o)
+					return a
+				},
+			  ctx = $('#odo')
+		get({by:'category'}, function (DATA) {
+			setupData(DATA,sets)
+			const 
 			chart = new Chart(ctx,{
-			type: 'line',
-			data: {
-				labels: ['a','b','c'],
-				datasets: [
-					{
-						label: 'votes',
-						data: [2,4,6],
-						borderColor: 'red',
-						fill: false,
-						yAxisID: 'y-axis-0'
-					},
-					{
-						label: 'years',
-						data: [10,4,7],
-						borderColor: 'gold',
-						fill: false,
-						yAxisID: 'y-axis-1'
-					}
-				],
-			},
-			options: {
-				scales: {
-					yAxes: [
-						{
-							id: 'y-axis-0',
-							ticks: {
-								beginAtZero: true
+				type: 'line',
+				data: {
+					labels: DATA.date,
+					datasets: sets
+				},
+				options: {
+					scales: {
+						yAxes: [
+							{
+								id: 'y-axis-0',
+								ticks: {
+									beginAtZero: false
+								}
 							}
-						},
-						{
-							id:'y-axis-1',
-							ticks: {
-								beginAtZero: true
-							},
-							position: 'right',
-							color: 'gold'
-						}
-					]
+						]
+					}
 				}
-			}
+			})
 		})
