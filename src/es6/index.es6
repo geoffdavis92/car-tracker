@@ -20,12 +20,10 @@ setTimeout(function() {
 get({by:'category'},(data) => {
 	for (cat in data) {
 		if (cat !== 'date') {
-			console.log('===== ',cat,' =====')
 			for(let i=0; i<data[cat].length; i++) {
 				data[cat][i] = parseFloat(data[cat][i].replace(/\$/g,''))
 			}
-			console.log(data[cat].sort())
-			let arr = data[cat].sort(),
+			let arr = data[cat].sort((a,b) => a - b),
 				o = cat === 'fill_cost' || cat === 'price_gal' ?
 					{
 						max: `$${arr[arr.length-1]}`,
@@ -36,8 +34,8 @@ get({by:'category'},(data) => {
 						max: arr[arr.length-1].toString(),
 						min:arr[0].toString()
 					}
-			console.log('sorted ',cat,' : ',arr)
-			console.log(cat,' : ',o)
+			// console.log('sorted ',cat,' : ',arr)
+			// console.log(cat,' : ',o)
 			$(`.data-view#${cat} td`).each(function(i,el) {
 				if ($(el).text() === o.max) {
 					$(el).addClass('max')
