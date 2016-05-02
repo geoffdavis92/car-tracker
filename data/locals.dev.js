@@ -1,6 +1,11 @@
 module.exports = {
   pages: [
   	{
+  		title: 'Error',
+  		route: '/error',
+  		noindex: true
+  	},
+  	{
   		title: 'Home',
   		alias: 'index',
   		route: '/'
@@ -21,5 +26,6 @@ module.exports = {
   		route: '/mph'
   	}
   ],
+  headScripts: ['get'],
   libScripts: ['jquery','chart']
 }
