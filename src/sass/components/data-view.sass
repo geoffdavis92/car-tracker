@@ -1,0 +1,25 @@
+// data-view
+.data-view
+	display: inline-block
+	margin: auto
+	max-width: 20%
+	padding: 0 5px
+	table
+		table-layout: fixed
+		tr
+			th
+				text-align: left
+			td
+				text-align: center
+				&.min
+					background-color: rgba(200,125,50,.33)
+					color: rgba(200,125,50,1)
+				&.max
+					background-color: rgba(50,50,175,.33)
+					color: rgba(50,50,175,1)
+				&.negative
+					background-color: rgba(225,100,100,.33)
+					color: rgba(255,50,50,.95)
+	&:first-of-type
+		table tr td
+			text-align: left
