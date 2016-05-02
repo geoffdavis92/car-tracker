@@ -1,3 +1,8 @@
 extends layouts/default
 block frontmatter
+	- var pageScripts = ['index']
+	- var categories = ['date','odo','avg_mph','avg_mpg','range_rem','range_new','range_diff','price_gal','fill_cost','since_last_fill']
 block content
+	.view-wrapper
+		each category in categories
+			+data-view(category)

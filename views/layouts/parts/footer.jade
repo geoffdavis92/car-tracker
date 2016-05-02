@@ -1,2 +1,6 @@
 footer
 	
+//- page scripts
+if pageScripts
+	each script in pageScripts
+		script(src='/js/#{script}.js')

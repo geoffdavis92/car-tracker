@@ -2,6 +2,8 @@ include ../../components/index
 doctype html
 head
 	title Car Tracker
-	link(rel="stylesheet" href="css/main.css")
+	link(rel="stylesheet" href="/css/main.css")
 	each script in libScripts
 		script(src="/js/lib/#{script}.js")
+	each script in headScripts
+		script(src="/js/#{script}.js")
