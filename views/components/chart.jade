@@ -1,4 +1,5 @@
 //- chart
 
-mixin chart(id,width=100%)
-	canvas(id=id width=width)
+mixin chart(id,width)
+	div.chart-wrapper
+		canvas(id=id width="#{width}")

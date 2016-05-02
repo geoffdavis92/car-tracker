@@ -2,3 +2,48 @@
 extends layouts/default
 block frontmatter
 block content
+	+chart('odo',250)
+	script.
+		var ctx = $('#odo'),
+			chart = new Chart(ctx,{
+			type: 'line',
+			data: {
+				labels: ['a','b','c'],
+				datasets: [
+					{
+						label: 'votes',
+						data: [2,4,6],
+						borderColor: 'red',
+						fill: false,
+						yAxisID: 'y-axis-0'
+					},
+					{
+						label: 'years',
+						data: [10,4,7],
+						borderColor: 'gold',
+						fill: false,
+						yAxisID: 'y-axis-1'
+					}
+				],
+			},
+			options: {
+				scales: {
+					yAxes: [
+						{
+							id: 'y-axis-0',
+							ticks: {
+								beginAtZero: true
+							}
+						},
+						{
+							id:'y-axis-1',
+							ticks: {
+								beginAtZero: true
+							},
+							position: 'right',
+							color: 'gold'
+						}
+					]
+				}
+			}
+		})
