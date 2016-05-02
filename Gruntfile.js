@@ -1,13 +1,13 @@
 module.exports = function(grunt) {
 	grunt.initConfig({
-		/*copy: {
+		copy: {
 			js: {
 				files: {
 					'js/lib/jquery.js':'node_modules/jquery/dist/jquery.js',
 					'js/lib/chart.js':'node_modules/chart.js/dist/chart.js'
 				}
 			}
-		},*/
+		},
 		watch: {
 			gfile: {
 				files: 'Gruntfile.js',
@@ -45,10 +45,10 @@ module.exports = function(grunt) {
 			}
 		}
 	})
-	//grunt.loadNpmTasks('grunt-contrib-copy')
+	grunt.loadNpmTasks('grunt-contrib-copy')
 	grunt.loadNpmTasks('grunt-contrib-watch')
 	grunt.loadNpmTasks('grunt-contrib-sass')
 	grunt.loadNpmTasks('grunt-babel')
 
-	grunt.registerTask('default',['watch'])
+	grunt.registerTask('default',['copy','watch'])
 }
