@@ -37,16 +37,23 @@ app.get('/data/get', function (req,res) {
 	let dataArr = data.toString().split('\n'),
 		categories = dataArr[0].replace(/\s|\//g,'_').replace(/\_$/g,'').toLowerCase().split(','),
 		byCategory = {},
+		byCategoryTrimmed = {},
 		byDate = {}
-
+	// Organize by Categories
 	for (let i=0;i<categories.length;i++) {
 		// iterate through categories
 		byCategory[categories[i]] = []
 		for (let _i=1;_i<dataArr.length;_i++) {
 			// iterate through dataset, starting after category row
-			byCategory[categories[i]].push(dataArr[_i].split(',')[i])
+			let row = dataArr[_i].split(',')[i]
+			if (categories[i] === 'date') {
+				row = new Date(row)
+				row = row.toString().replace(/GMT\-0\d00|\(CDT\)|\(CST\)/g,'').replace(/\:00\s/g,'')
+			}
+			byCategory[categories[i]].push(row) // dataArr[_i].split(',')[i]
 		}
 	}
+	// Organize by Date
 	for (let i=1; i<dataArr.length;i++) {
 		// Iterate through dataset, starting after category row
 		let formattedDate = dataArr[i].split(',')[0].replace(/\/|\:|/g,'').replace(/\s/g,'_')
@@ -65,7 +72,24 @@ app.get('/data/get', function (req,res) {
 	if (req.query.by) {
 		switch(req.query.by) {
 			case ('category'):
-				res.send(byCategory)
+				if (req.query.trim === 'true') {
+					for (let i=0;i<categories.length;i++) {
+						// iterate through categories
+						byCategoryTrimmed[categories[i]] = []
+						for (let _i=1;_i<dataArr.length;_i++) {
+							// iterate through dataset, starting after category row
+							let row = dataArr[_i].split(',')[i]
+							if (categories[i] === 'date') {
+								row = new Date(row)
+								row = row.toString().replace(/GMT\-0\d00|\(CDT\)|\(CST\)/g,'').replace(/\:00\s/g,'').replace(/Sun|Mon|Tue|Wed|Thu|Fri|Sat/g,'')
+							}
+							byCategoryTrimmed[categories[i]].push(row) // dataArr[_i].split(',')[i]
+						}
+					}
+					res.send(byCategoryTrimmed)
+				} else {
+					res.send(byCategory)
+				}
 				break;
 			case ('date'):
 				res.send(byDate)

@@ -1,4 +1,31 @@
-//- avg/mpg
+//- mpg
 extends layouts/default
 block frontmatter
 block content
+	+chart('mpg',250)
+	script.
+		var ctx = $('#mpg')
+		get({by:'category'}, function (DATA) {
+			setupAvg(DATA,'Average Mpg Reading','avg_mpg',[200,100,250])
+			setupData(DATA,'Mpg Reading','avg_mpg',[50,150,50])
+			var chart = new Chart(ctx,{
+				type: 'line',
+				data: {
+					labels: DATA.date,
+					datasets: sets
+				},
+				options: {
+					scales: {
+						yAxes: [
+							{
+								id: 'y-axis-0',
+								ticks: {
+									beginAtZero: false,
+									mirror: true
+								}
+							}
+						]
+					}
+				}
+			})
+		})

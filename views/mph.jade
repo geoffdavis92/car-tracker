@@ -2,3 +2,30 @@
 extends layouts/default
 block frontmatter
 block content
+	+chart('mph',250)
+	script.
+		var ctx = $('#mph')
+		get({by:'category'}, function (DATA) {
+			setupAvg(DATA,'Average Mph Reading','avg_mph',[0,100,250])
+			setupData(DATA,'Mph Reading','avg_mph',[250,50,50])
+			var chart = new Chart(ctx,{
+				type: 'line',
+				data: {
+					labels: DATA.date,
+					datasets: sets
+				},
+				options: {
+					scales: {
+						yAxes: [
+							{
+								id: 'y-axis-0',
+								ticks: {
+									beginAtZero: false,
+									mirror: true
+								}
+							}
+						]
+					}
+				}
+			})
+		})

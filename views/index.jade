@@ -5,51 +5,18 @@ block frontmatter
 block content
 	+chart('carData',250)
 	script.
-		const sets = [];
-			  setupData = function(d,l,p,c,a=sets) {
-			  		var o = {}
-					o['label'] = l
-					o['data'] = d[p]
-					o['borderColor'] = `rgba(${c[0]},${c[1]},${c[2]},.9)`
-					o['backgroundColor'] = `rgba(${c[0]},${c[1]},${c[2]},.3)`
-					a.push(o)
-					return a
-				},
-				setupAvg = function(d,l,p,c,a=sets) {
-					var o = {}, avg = function(_d) {
-						var _sum = 0
-						for(i=0;i<_d.length;i++) {
-							_sum += parseFloat(_d[i])
-						}
-						console.log(_sum, _d.length, (_sum / _d.length))
-						return (_sum / _d.length)
-					}, _arr = []
-
-					for(z=0;z<54;z++) {
-						_arr.push(avg(d[p]))
-					}
-
-					o['label'] = l
-					o['data'] = _arr
-					o['borderColor'] = `rgba(${c[0]},${c[1]},${c[2]},1)`
-					o['backgroundColor'] = `transparent`
-					o['fille'] = false
-					a.push(o)
-					return a
-				},
-			  ctx = $('#carData')
-		get({by:'category'}, function (DATA) {
-			setupData(DATA,'Range Remaining','range_rem',[255,100,100])
-			setupAvg(DATA,'Range Rem Average','range_rem',[255,175,0])
-
+		var ctx = $('#carData')
+		get({by:'category',trim:'true'}, function (DATA) {
 			setupData(DATA,'Range Difference','range_diff',[100,255,100])
 			setupAvg(DATA,'Range Diff Average','range_diff',[0,255,175])
+
+			setupData(DATA,'Range Remaining','range_rem',[255,100,100])
+			setupAvg(DATA,'Range Rem Average','range_rem',[255,175,0])
 
 			setupData(DATA,'Range New','range_new',[100,100,255])
 			setupAvg(DATA,'Range New Average','range_new',[0,175,255])
 
-			const 
-			chart = new Chart(ctx,{
+			var chart = new Chart(ctx,{
 				type: 'line',
 				data: {
 					labels: DATA.date,
@@ -60,8 +27,11 @@ block content
 						yAxes: [
 							{
 								id: 'y-axis-0',
+								position: 'left',
 								ticks: {
-									beginAtZero: false
+									beginAtZero: false,
+									maxTicksLimit: 20,
+									suggestedMin: -125
 								}
 							}
 						]

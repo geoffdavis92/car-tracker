@@ -4,21 +4,11 @@ block frontmatter
 block content
 	+chart('odo',250)
 	script.
-		const sets = [];
-			  setupData = function(d,a) {
-			  		var o = {}
-					o['label'] = "odometer reading"
-					o['data'] = d.odo
-					o['borderColor'] = 'rgba(250,125,0,1)'
-					o['backgroundColor'] = 'rgba(250,125,0,.3)'
-					a.push(o)
-					return a
-				},
-			  ctx = $('#odo')
+		var ctx = $('#odo')
 		get({by:'category'}, function (DATA) {
-			setupData(DATA,sets)
-			const 
-			chart = new Chart(ctx,{
+			setupAvg(DATA,'Average Odometer Reading','odo',[255,100,25])
+			setupData(DATA,'Odometer Reading','odo',[255,175,50])
+			var chart = new Chart(ctx,{
 				type: 'line',
 				data: {
 					labels: DATA.date,
@@ -30,7 +20,8 @@ block content
 							{
 								id: 'y-axis-0',
 								ticks: {
-									beginAtZero: false
+									beginAtZero: false,
+									mirror: true
 								}
 							}
 						]

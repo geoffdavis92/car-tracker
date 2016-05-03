@@ -1,0 +1,34 @@
+//- cost
+extends layouts/default
+block frontmatter
+block content
+	+chart('cost',250)
+	script.
+		var ctx = $('#cost')
+		get({by:'category',trim:true}, function (DATA) {
+			setupAvg(DATA,'Average Fill Cost','fill_cost',[255,200,75].reverse())
+			setupAvg(DATA,'Average Cost/Gal','price_gal',[0,100,250])
+			setupData(DATA,'Fill Cost','fill_cost',[250,50,50])
+			setupData(DATA,'Cost/Gal','price_gal',[100,50,200])
+			console.log(sets)
+			var chart = new Chart(ctx,{
+				type: 'line',
+				data: {
+					labels: DATA.date,
+					datasets: sets
+				},
+				options: {
+					scales: {
+						yAxes: [
+							{
+								id: 'y-axis-0',
+								ticks: {
+									beginAtZero: false,
+									callback: (v) => `$${parseFloat(v.toString().substr(0,6))}`
+								}
+							}
+						]
+					}
+				}
+			})
+		})

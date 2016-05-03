@@ -24,7 +24,12 @@ module.exports = {
   		title: 'MPh',
   		alias: 'mph',
   		route: '/mph'
-  	}
+  	},
+    {
+      title: 'Cost',
+      alias: 'cost',
+      route: '/cost'
+    }
   ],
   headScripts: ['get'],
   libScripts: ['jquery','chart']
