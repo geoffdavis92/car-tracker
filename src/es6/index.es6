@@ -17,7 +17,7 @@ setTimeout(function() {
 	})
 }, 25)
 
-get({by:'category'},(data) => {
+get('/car/category',{},(data) => {
 	for (cat in data) {
 		if (cat !== 'date') {
 			for(let i=0; i<data[cat].length; i++) {

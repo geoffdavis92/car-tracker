@@ -1,9 +1,9 @@
-function get (query, callback) {
-	let res = $.ajax({url:'/data/get',data:query}).success(function(data) { callback(data) })
+function get (url,query, callback) {
+	let res = $.ajax({url:`/data/get${url}`,data:query}).success(function(data) { callback(data) })
 }
 
 function view(category,mountNode) {
-	get({by:'category'}, function(data) {
+	get('/car/category',{}, function(data) {
 		// console.log(data[category])
 		return $(mountNode).html(`
 			<table>

@@ -5,7 +5,7 @@ block content
 	+chart('mpg',250)
 	script.
 		var ctx = $('#mpg')
-		get({by:'category'}, function (DATA) {
+		get('/car/category',{}, function (DATA) {
 			setupAvg(DATA,'Average Mpg Reading','avg_mpg',[200,100,250])
 			setupData(DATA,'Mpg Reading','avg_mpg',[50,150,50])
 			var chart = new Chart(ctx,{

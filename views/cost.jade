@@ -5,7 +5,7 @@ block content
 	+chart('cost',250)
 	script.
 		var ctx = $('#cost')
-		get({by:'category',trim:true}, function (DATA) {
+		get('/car/category',{trim:true}, function (DATA) {
 			setupAvg(DATA,'Average Fill Cost','fill_cost',[255,200,75].reverse())
 			setupAvg(DATA,'Average Cost/Gal','price_gal',[0,100,250])
 			setupData(DATA,'Fill Cost','fill_cost',[250,50,50])

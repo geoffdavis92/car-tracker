@@ -6,7 +6,7 @@ block content
 	script.
 		var ctx = $('#odo'),
 			chart
-		get({by:'category'}, function (DATA) {
+		get('/car/category',{}, function (DATA) {
 			setupAvg(DATA,'Average Odometer Reading','odo',[255,100,25])
 			setupData(DATA,'Odometer Reading','odo',[255,175,50])
 			chart = new Chart(ctx,{

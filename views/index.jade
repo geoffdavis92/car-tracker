@@ -6,7 +6,7 @@ block content
 	+chart('carData',250)
 	script.
 		var ctx = $('#carData')
-		get({by:'category',trim:'true'}, function (DATA) {
+		get('/car/category',{trim:true}, function (DATA) {
 			setupData(DATA,'Range Difference','range_diff',[100,255,100])
 			setupAvg(DATA,'Range Diff Average','range_diff',[0,255,175])
 
