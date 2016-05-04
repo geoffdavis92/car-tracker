@@ -20,12 +20,6 @@ app
 	.use('/assets',express.static(`${__dirname}/assets`))
 
 // db config
-connection.connect()
-connection.query('SELECT 1 + 1 AS solution', (err,row,fields) => {
-	if (err) throw err;
-	console.log(`Solution is ${rows[0].solution}`)
-})
-connection.end()
 	/*db.serialize(function() {
 		db.run('CREATE TABLE test (info TEXT)')
 		let seed = db.prepare(`INSERT INTO test VALUES (?)`)
