@@ -1,9 +1,11 @@
 'use strict';
 
-const express = require('express'), 
+const express = require('express'),
+	  // sql = require('sqlite3'),
 	  config = require('./config.js').express,
 	  data = require('./data/car_tracker_data-5316.js').csv,
 	  devLocals = require('./data/locals.dev.js'),
+	  // db = new sql.Database(':memory:'),
 	  app = express()
 
 // server config
@@ -17,9 +19,28 @@ app
 	.use('/data',express.static(`${__dirname}/data`))
 	.use('/assets',express.static(`${__dirname}/assets`))
 
+// db config
+connection.connect()
+connection.query('SELECT 1 + 1 AS solution', (err,row,fields) => {
+	if (err) throw err;
+	console.log(`Solution is ${rows[0].solution}`)
+})
+connection.end()
+	/*db.serialize(function() {
+		db.run('CREATE TABLE test (info TEXT)')
+		let seed = db.prepare(`INSERT INTO test VALUES (?)`)
+		for (let i=0; i < 10; i++) {
+			seed.run((new Date(Date.now())).toString())
+		}
+		seed.finalize()
+		db.each('SELECT rowid AS id, info FROM test', (err,row) => console.log(`${row.id}: ${row.info}`))
+		db.close()
+	})*/
+
 // Spin up server
 app.listen(config.port)
 console.log(`App started at ${config.port}`);
+
 // Data config
 app.locals = devLocals
 const parseData = function () {
