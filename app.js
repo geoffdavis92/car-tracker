@@ -37,7 +37,7 @@ const parseData = function () {
 			let row = dataArr[_i].split(',')[i]
 			if (categories[i] === 'date') {
 				row = new Date(row)
-				row = row.toString().replace(/GMT\-0\d00|\(CDT\)|\(CST\)/g,'').replace(/\:00\s/g,'').replace(/Sun|Mon|Tue|Wed|Thu|Fri|Sat/g,'')
+				row = row.toString().replace(/GMT\-0\d00|\(CDT\)|\(CST\)/g,'').replace(/\:00\s/g,'').replace(/Sun|Mon|Tue|Wed|Thu|Fri|Sat/g,'').replace(/^\s|\s$/g,'')
 			}
 			byCategoryTrimmed[categories[i]].push(row) // dataArr[_i].split(',')[i]
 		}
@@ -122,24 +122,22 @@ app.get([`${dataPath.get}/:id/:prop`,`${dataPath.get}/:id`], function (req,res) 
 })
 
 app.get([`${dataPath.get}`,`${dataPath.get}/`], function (req,res) {
-	logData(req)
-	
-	
+	logData(req)	
 	// Set up response based on query
 	if (req.query.by) {
 		switch(req.query.by) {
 			case ('category'):
 				if (req.query.trim === 'true') {
-					res.send(parseData().byCategoryTrimmed)
+					res.json(parseData().byCategoryTrimmed)
 				} else {
-					res.send(parseData().byCategory)
+					res.json(parseData().byCategory)
 				}
 				break;
 			case ('date'):
-				res.send(parseData().byDate)
+				res.json(parseData().byDate)
 				break;
 			default:
-				res.send(dataArr)
+				res.json(dataArr)
 				break;
 		}
 	} else {
