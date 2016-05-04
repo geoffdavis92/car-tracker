@@ -171,3 +171,5 @@ for (let i in pageList) {
 		res.render(`${pageList[i].alias ? pageList[i].alias : pageTitle.toLowerCase()}`,pageData)
 	})
 }
+
+res.status(404).json({error:'404 error'})
