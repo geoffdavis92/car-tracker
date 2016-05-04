@@ -22,23 +22,26 @@ app.listen(config.port)
 console.log(`App started at ${config.port}`);
 // Data config
 app.locals = devLocals
-
-// Routes
-const logData = function (dataset) {
-	let response = {}
-	if (dataset.query !== {}) response['query'] = dataset.query
-	if (dataset.route) response['route'] = { path: dataset.route.path, methods: dataset.route.methods }
-	console.log(response)
-	return response
-}
-
-app.get('/data/get', function (req,res) {
-	logData(req)
+const parseData = function () {
 	let dataArr = data.toString().split('\n'),
 		categories = dataArr[0].replace(/\s|\//g,'_').replace(/\_$/g,'').toLowerCase().split(','),
 		byCategory = {},
 		byCategoryTrimmed = {},
 		byDate = {}
+	// Trim Categories
+	for (let i=0;i<categories.length;i++) {
+		// iterate through categories
+		byCategoryTrimmed[categories[i]] = []
+		for (let _i=1;_i<dataArr.length;_i++) {
+			// iterate through dataset, starting after category row
+			let row = dataArr[_i].split(',')[i]
+			if (categories[i] === 'date') {
+				row = new Date(row)
+				row = row.toString().replace(/GMT\-0\d00|\(CDT\)|\(CST\)/g,'').replace(/\:00\s/g,'').replace(/Sun|Mon|Tue|Wed|Thu|Fri|Sat/g,'')
+			}
+			byCategoryTrimmed[categories[i]].push(row) // dataArr[_i].split(',')[i]
+		}
+	}
 	// Organize by Categories
 	for (let i=0;i<categories.length;i++) {
 		// iterate through categories
@@ -67,32 +70,73 @@ app.get('/data/get', function (req,res) {
 			byDate[formattedDate].push(pushObj)
 		}
 	}
+
+	return {
+		byCategory, byCategoryTrimmed, byDate
+	}
+}
+
+// Routes
+const logData = function (dataset) {
+	let response = {}
+	if (dataset.query !== {}) response['query'] = dataset.query
+	if (dataset.route) response['route'] = { path: dataset.route.path, methods: dataset.route.methods }
+	if (dataset.params) response.route['params'] = dataset.params
+	console.log(response)
+	return response
+}
+
+const dataPath = {
+	get: '/data/get',
+	post: '/data/post'
+}
+app.get([`${dataPath.get}/:id/:prop`,`${dataPath.get}/:id`], function (req,res) {
+	// console.log(req)
+	logData(req)
+	switch(req.params.id) {
+		case ('car'): 
+			switch(req.params.prop) {
+				case 'category':
+					if (req.query.trim === 'true' || req.query.trim === '') {
+						res.send(parseData().byCategoryTrimmed)
+					} else {
+						res.send(parseData().byCategory)
+					}
+					break;
+				case 'date':
+					res.send(parseData().byDate)
+					break;
+				default: 
+					if (req.params.prop === undefined) {
+						res.render('error',{title: 'API Error', msg: `No API property specified.`})
+					} else {	
+						res.render('error',{title: 'API Error', msg: `No available API property of ${req.params.prop} in ${req.params.id}.`})
+					}
+					break;
+			}
+			break;
+		default:
+			res.render('error',{msg: `${req.params.id ? req.params.id : 'No id'}, ${req.params.prop ? req.params.prop : 'No prop'}`, title: 'Route Check'})
+			break;
+	}
+})
+
+app.get([`${dataPath.get}`,`${dataPath.get}/`], function (req,res) {
+	logData(req)
+	
 	
 	// Set up response based on query
 	if (req.query.by) {
 		switch(req.query.by) {
 			case ('category'):
 				if (req.query.trim === 'true') {
-					for (let i=0;i<categories.length;i++) {
-						// iterate through categories
-						byCategoryTrimmed[categories[i]] = []
-						for (let _i=1;_i<dataArr.length;_i++) {
-							// iterate through dataset, starting after category row
-							let row = dataArr[_i].split(',')[i]
-							if (categories[i] === 'date') {
-								row = new Date(row)
-								row = row.toString().replace(/GMT\-0\d00|\(CDT\)|\(CST\)/g,'').replace(/\:00\s/g,'').replace(/Sun|Mon|Tue|Wed|Thu|Fri|Sat/g,'')
-							}
-							byCategoryTrimmed[categories[i]].push(row) // dataArr[_i].split(',')[i]
-						}
-					}
-					res.send(byCategoryTrimmed)
+					res.send(parseData().byCategoryTrimmed)
 				} else {
-					res.send(byCategory)
+					res.send(parseData().byCategory)
 				}
 				break;
 			case ('date'):
-				res.send(byDate)
+				res.send(parseData().byDate)
 				break;
 			default:
 				res.send(dataArr)

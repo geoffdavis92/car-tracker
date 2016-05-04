@@ -4,11 +4,12 @@ block frontmatter
 block content
 	+chart('odo',250)
 	script.
-		var ctx = $('#odo')
+		var ctx = $('#odo'),
+			chart
 		get({by:'category'}, function (DATA) {
 			setupAvg(DATA,'Average Odometer Reading','odo',[255,100,25])
 			setupData(DATA,'Odometer Reading','odo',[255,175,50])
-			var chart = new Chart(ctx,{
+			chart = new Chart(ctx,{
 				type: 'line',
 				data: {
 					labels: DATA.date,
