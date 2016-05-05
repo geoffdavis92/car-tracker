@@ -74,7 +74,7 @@ const parseData = function () {
 	// Organize by Date
 	for (let i=1; i<dataArr.length;i++) {
 		// Iterate through dataset, starting after category row
-		let formattedDate = dataArr[i].split(',')[0].replace(/\/|\:|/g,'').replace(/\s/g,'_')
+		let formattedDate = dataArr[i].split(',')[0]
 		byDate[formattedDate] = []
 		for (let _i=1;_i<dataArr[i].split(',').length;_i++) {
 			// Iterate through data point
@@ -112,14 +112,35 @@ app.get([`${dataPath.get}/:id/:prop`,`${dataPath.get}/:id`], function (req,res) 
 		case ('car'): 
 			switch(req.params.prop) {
 				case 'category':
+					let select = req.query.select ? req.query.select : false
 					if (req.query.trim === 'true' || req.query.trim === '') {
-						res.send(parseData().byCategoryTrimmed)
+						if (select) {
+							res.send(parseData().byCategoryTrimmed[select])
+						} else {
+							res.send(parseData().byCategoryTrimmed)
+						}
 					} else {
-						res.send(parseData().byCategory)
+						if (select) {
+							res.send(parseData().byCategory[select])
+						} else {
+							res.send(parseData().byCategory)
+						}
 					}
 					break;
 				case 'date':
-					res.send(parseData().byDate)
+					if (req.query.select) {
+						let rxp = new RegExp(req.query.select),
+							obj = {}
+						for (let record in parseData().byDate) {
+							if (record.search(rxp) >= 0) {
+								// console.log(record)
+								obj[record] = (parseData().byDate[record])
+							}
+						}
+						res.send(obj)
+					} else {
+						res.send(parseData().byDate)
+					}
 					break;
 				default: 
 					if (req.params.prop === undefined) {
