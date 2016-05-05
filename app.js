@@ -172,4 +172,4 @@ for (let i in pageList) {
 	})
 }
 
-res.status(404).json({error:'404 error'})
+// res.status(404).json({error:'404 error'})
