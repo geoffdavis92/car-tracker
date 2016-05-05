@@ -75,16 +75,18 @@ const parseData = function () {
 	for (let i=1; i<dataArr.length;i++) {
 		// Iterate through dataset, starting after category row
 		let formattedDate = dataArr[i].split(',')[0]
-		byDate[formattedDate] = []
+		byDate[formattedDate] = {}
 		for (let _i=1;_i<dataArr[i].split(',').length;_i++) {
 			// Iterate through data point
-			let pushObj = {}
+				// let pushObj = {}
 			// set current row's _i prop to pushObj category's value
-			pushObj[categories[_i]] = dataArr[i].split(',')[_i]
+				// pushObj[categories[_i]] = dataArr[i].split(',')[_i]
 			// push
-			byDate[formattedDate].push(pushObj)
+			byDate[formattedDate][categories[_i]] = dataArr[i].split(',')[_i]
 		}
 	}
+
+	console.log(byDate)
 
 	return {
 		byCategory, byCategoryTrimmed, byDate
